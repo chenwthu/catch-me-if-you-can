@@ -57,8 +57,8 @@ Painter.prototype.paint = function() {
 
 	if (args.length > 2) paintGrid(id2px(args[0], args[2], args[3]));
 	else
-		for (var y = 0; id2px(args[0],0,y).y < this.canvas.height(); ++y)
-			for (var x = 0; id2px(args[0],x,0).x < this.canvas.width(); ++x)
+		for (var y = 0; id2px(args[0],0,y).y <= this.canvas.height(); ++y)
+			for (var x = 0; id2px(args[0],x,0).x <= this.canvas.width(); ++x)
 				paintGrid(id2px(args[0], x, y));
 };
 
