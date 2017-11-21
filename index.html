@@ -1,49 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>CATCH ME IF YOU CAN!</title>
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+    <meta charset="utf-8">
+    <title>CATCH ME IF YOU CAN!</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-	<div id="container">
-		<div id="sub-container">
-			<div id="map-container">
-				<canvas id="grid-layer" width="1000" height="1000"></canvas>
-				<canvas id="obstacle-layer" width="1000" height="1000"></canvas>
-				<canvas id="src-dst-layer" width="1000" height="1000"></canvas>
-				<canvas id="track-layer" width="1000" height="1000"></canvas>
-			</div>
-			<div id="panel">
-				<div id="grid-shape">
-					<button>Grid Shape</button>
-					<div><input type="radio" name="grid-shape" value="0" id="triangle">Triangle</div>
-					<div><input type="radio" name="grid-shape" value="1" id="square" checked="checked">Square</div>
-					<div><input type="radio" name="grid-shape" value="2" id="hexagon">Hexagon</div>
-				</div>
-				<div id="algorithm">
-					<button>Algorithm</button>
-					<div><input type="radio" name="algorithm" value="0" checked="checked">BFS</div>
-					<div><input type="radio" name="algorithm" value="1">Bidirectional BFS</div>
-					<div><input type="radio" name="algorithm" value="2">Iterative Deepening DFS</div>
-					<div><input type="radio" name="algorithm" value="3">A* Search</div>
-					<div><input type="radio" name="algorithm" value="4">Iterative Deepening A* Search</div>
-					<div><input type="radio" name="algorithm" value="5">B* Search</div>
-				</div>
-				<div id="buttons">
-					<button id="show-animation">Show Animation</button>
-					<button id="catch-me">CATCH ME!</button>
-					<button id="clear-obstacles">Clear Obstacles</button>
-					<button id="clear-tracks">Clear Tracks</button>
-				</div>
-				<div id="timer"></div>
-			</div>
-		</div>
-	</div>
-	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="js/utility.js"></script>
-	<script type="text/javascript" src="js/painter.js"></script>
-	<script type="text/javascript" src="js/searcher.js"></script>
-	<script type="text/javascript" src="js/setup.js"></script>
+    <div id="container">
+    <div id="sub-container">
+        <div id="map-container">
+            <canvas id="grid-layer" width="1000" height="1000"></canvas>
+            <canvas id="obstacle-layer" width="1000" height="1000"></canvas>
+            <canvas id="src-dst-layer" width="1000" height="1000"></canvas>
+            <canvas id="track-layer" width="1000" height="1000"></canvas>
+        </div>
+        <div id="panel">
+            <div id="grid-shape">
+                <button>Grid Shape</button>
+                <div><input type="radio" name="grid-shape" value="0" id="triangle">Triangle</div>
+                <div><input type="radio" name="grid-shape" value="1" id="square" checked="checked">Square</div>
+                <div><input type="radio" name="grid-shape" value="2" id="hexagon">Hexagon</div>
+            </div>
+            <div id="algorithm">
+                <button>Algorithm</button>
+                <div><input type="radio" name="algorithm" value="0" checked="checked">BFS</div>
+                <div><input type="radio" name="algorithm" value="1">Bidirectional BFS</div>
+                <div><input type="radio" name="algorithm" value="2">Iterative Deepening DFS</div>
+                <div><input type="radio" name="algorithm" value="3">A* Search</div>
+                <div><input type="radio" name="algorithm" value="4">Iterative Deepening A* Search</div>
+                <div><input type="radio" name="algorithm" value="5">B* Search</div>
+            </div>
+            <div id="buttons">
+                <button id="show-animation">Show Animation</button>
+                <button id="catch-me">CATCH ME!</button>
+                <button id="clear-obstacles">Clear Obstacles</button>
+                <button id="clear-tracks">Clear Tracks</button>
+            </div>
+            <div id="timer"></div>
+        </div>
+    </div>
+    </div>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/utility.js"></script>
+    <script type="text/javascript" src="js/painter.js"></script>
+    <script type="text/javascript" src="js/searcher.js"></script>
+    <script type="text/javascript" src="js/setup.js"></script>
 </body>
 </html>

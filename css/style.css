@@ -68,6 +68,12 @@ canvas
     left: 0;
 }
 
+#obstacle-layer,
+#track-layer
+{
+    z-index: -1;
+}
+
 #panel
 {
     display: -webkit-box;
