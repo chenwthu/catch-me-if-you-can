@@ -46,7 +46,7 @@ $(function() {
                 obstaclePainter.paint(gridShape, 'fill', pos.x, pos.y, 'white');
             }
 
-            if (e.type == 'mousedown') dragging = map[pos.y][pos.x];
+            if (dragging == -1) dragging = map[pos.y][pos.x];
         }
     })
     .on('mouseup', function(e) {
@@ -93,7 +93,7 @@ $(function() {
 
     $('#catch-me').on('click', function() {
         $('#clear-tracks').click();
-        searcher.search(animation, trackPainter);
+        searcher.search(gridShape, map, src, dst, animation, trackPainter);
     });
 
     $('#clear-obstacles').on('click', function() {
