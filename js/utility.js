@@ -90,3 +90,11 @@ function newSrcDst(map) {
     
     return [src, dst];
 }
+
+function Queue() {
+    this.data = [];
+    this.empty = function() { return this.data.length == 0; };
+    this.push = function(val) { this.data.push(val); };
+    this.front = function() { return this.empty() ? undefined : this.data[0]; };
+    this.pop = function() { return this.data.shift(); };
+}
