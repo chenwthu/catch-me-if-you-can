@@ -69,7 +69,6 @@ Searcher.prototype.search = function(gridShape, map, src, dst, animation, painte
                         prev[y][x] = current;
                         q.push({x: x, y: y});
                         animationList.push({x: x, y: y});
-                        if (animation && !(x==dst.x && y==dst.y)) map[y][x] = 4;
                         if (x==dst.x && y==dst.y) {
                             var track = [dst];
                             while (prev[track[0].y][track[0].x])
@@ -113,6 +112,8 @@ Searcher.prototype.search = function(gridShape, map, src, dst, animation, painte
         var int = setInterval(function() {
             var current = result.animationList.front();
             painter.paint(gridShape, 'fill', current.x, current.y, 'cyan');
+            if (!(current.x==src.x && current.y==src.y) && !(current.x==dst.x && current.y==dst.y))
+                map[current.y][current.x] = 4;
             result.animationList.pop();
 
             if (result.animationList.empty()) {

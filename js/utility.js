@@ -74,16 +74,16 @@ function newSrcDst(map) {
 
     do {
         src = {
-            x: Math.floor(Math.random()*map[0].length),
-            y: Math.floor(Math.random()*map.length)
+            x: Math.floor(Math.random()*(map[0].length-5))+2,
+            y: Math.floor(Math.random()*(map.length-5))+2
         };
     } while (map[src.y][src.x]);
     map[src.y][src.x] = 1;
 
     do {
         dst = {
-            x: Math.floor(Math.random()*map[0].length),
-            y: Math.floor(Math.random()*map.length)
+            x: Math.floor(Math.random()*(map[0].length-5))+2,
+            y: Math.floor(Math.random()*(map.length-5))+2
         };
     } while (map[dst.y][dst.x]);
     map[dst.y][dst.x] = 2;
