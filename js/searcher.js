@@ -54,8 +54,10 @@ Searcher.prototype.search = function(gridShape, map, src, dst, animation, painte
             var q = new Queue();
             for (q.push(src); !q.empty(); q.pop()) {
                 var current = q.front();
-                if (animation)
+                if (animation) {
                     painter.paint(gridShape, 'fill', current.x, current.y, 'orange');
+                    map[current.y][current.x] = 4;
+                }
 
                 var neighbor = getNeighbor(current);
                 for (var i = 0; i < neighbor.length; ++i) {
@@ -98,5 +100,6 @@ Searcher.prototype.search = function(gridShape, map, src, dst, animation, painte
 
     $.each(track, function(id, val) {
         painter.paint(gridShape, 'fill', val.x, val.y, 'red');
+        map[val.y][val.x] = 5;
     });
 };

@@ -37,6 +37,7 @@ $(function() {
         if (e.which == 1) { // left button
             var pos = getPos(e);
 
+            if (map[pos.y][pos.x] > 3) $('#clear-tracks').click();
             if (map[pos.y][pos.x]==0 && (dragging==-1 || dragging==3)) {
                 map[pos.y][pos.x] = 3;
                 obstaclePainter.paint(gridShape, 'fill', pos.x, pos.y, 'gray');
