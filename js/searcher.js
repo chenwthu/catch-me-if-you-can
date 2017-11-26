@@ -37,7 +37,11 @@ Searcher.prototype.search = function(gridShape, map, src, dst, animation, painte
     };
 
     var bfs = function(src, dst) {
-        if (src.x==dst.x && src.y==dst.y) return [src];
+        if (src.x==dst.x && src.y==dst.y) return {
+            animationList: new Queue(),
+            prev: [],
+            track: [src]
+        };
         else {
             var visited = [];
             for (var i = 0; i < map.length; ++i) {
@@ -52,12 +56,9 @@ Searcher.prototype.search = function(gridShape, map, src, dst, animation, painte
                 prev.push(new Array(map[0].length));
 
             var q = new Queue();
-            for (q.push(src); !q.empty(); q.pop()) {
+            var animationList = new Queue();
+            for (q.push(src), animationList.push(src); !q.empty(); q.pop()) {
                 var current = q.front();
-                if (animation) {
-                    painter.paint(gridShape, 'fill', current.x, current.y, 'orange');
-                    map[current.y][current.x] = 4;
-                }
 
                 var neighbor = getNeighbor(current);
                 for (var i = 0; i < neighbor.length; ++i) {
@@ -67,30 +68,32 @@ Searcher.prototype.search = function(gridShape, map, src, dst, animation, painte
                         visited[y][x] = 1;
                         prev[y][x] = current;
                         q.push({x: x, y: y});
+                        animationList.push({x: x, y: y});
+                        if (animation && !(x==dst.x && y==dst.y)) map[y][x] = 4;
                         if (x==dst.x && y==dst.y) {
                             var track = [dst];
                             while (prev[track[0].y][track[0].x])
                                 track.unshift(prev[track[0].y][track[0].x]);
-                            return track;
+                            return {
+                                animationList: animationList,
+                                prev: prev,
+                                track: track
+                            };
                         }
-
-                        if (animation)
-                            painter.paint(gridShape, 'fill', x, y, 'cyan');
                     }
                 }
-
-                if (animation)
-                    painter.paint(gridShape, 'fill', current.x, current.y, 'cyan');
             }
         }
-        return [];
+        return {
+            animationList: animationList,
+            prev: prev,
+            track: []
+        };
     };
 
     /* main */
-    var track;
-
     switch (this.algorithm) {
-        case '0': track = bfs(src, dst); break;
+        case '0': result = bfs(src, dst); break;
         case '1':
         case '2':
         case '3':
@@ -98,8 +101,25 @@ Searcher.prototype.search = function(gridShape, map, src, dst, animation, painte
         case '5':
     }
 
-    $.each(track, function(id, val) {
-        painter.paint(gridShape, 'fill', val.x, val.y, 'red');
-        map[val.y][val.x] = 5;
-    });
+    var showTrack = function() {
+        $.each(result.track, function(id, val) {
+            painter.paint(gridShape, 'fill', val.x, val.y, 'red');
+            if (!(val.x==src.x && val.y==src.y) && !(val.x==dst.x && val.y==dst.y))
+                map[val.y][val.x] = 5;
+        });
+    };
+
+    if (animation) {
+        var int = setInterval(function() {
+            var current = result.animationList.front();
+            painter.paint(gridShape, 'fill', current.x, current.y, 'cyan');
+            result.animationList.pop();
+
+            if (result.animationList.empty()) {
+                showTrack();
+                clearInterval(int);
+            }
+        }, 200);
+    }
+    else showTrack();
 };

@@ -60,9 +60,9 @@ function px2id(gridShape, x, y) {
 function getMap(canvas, gridShape) {
     var map = [];
 
-    for (var y = 0; id2px(gridShape,0,y).y < canvas.height(); ++y) {
+    for (var y = 0; id2px(gridShape,0,y).y < canvas.height() + gridShape.a; ++y) {
         map.push([]);
-        for (var x = 0; id2px(gridShape,x,0).x < canvas.width(); ++x)
+        for (var x = 0; id2px(gridShape,x,0).x < canvas.width() + gridShape.a; ++x)
             map[y].push(0);
     }
 
