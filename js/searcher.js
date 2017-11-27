@@ -222,11 +222,67 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
         }
     };
 
+    var astar = function(src, dst) {
+        if (src.x==dst.x && src.y==dst.y) return {
+            animationList: new Queue(),
+            track: [src]
+        };
+        else {
+            var cost = [];
+            for (var i = 0; i < map.length; ++i) {
+                cost.push([]);
+                for (var j = 0; j < map[0].length; ++j)
+                    cost[i].push(Infinity);
+            }
+            cost[src.y][src.x] = 0;
+
+            var prev = [];
+            for (var i = 0; i < map.length; ++i)
+                prev.push(new Array(map[0].length));
+
+            var g = function(pos) { return cost[pos.y][pos.x]; };
+            var h = function(pos) { return Math.abs(pos.x-dst.x) + Math.abs(pos.y-dst.y); };
+
+            var q = new PriorityQueue();
+            var animationList = new Queue();
+            for (q.push({x: src.x, y: src.y, priority: 0}),
+                    animationList.push(src); !q.empty(); q.pop()) {
+                var current = q.top();
+
+                var neighbor = getNeighbor(current);
+                for (var i = 0; i < neighbor.length; ++i) {
+                    var x = current.x + neighbor[i].x;
+                    var y = current.y + neighbor[i].y;
+                    if (valid({x: x, y: y}) && map[y][x]!=3 && g(current)+1<cost[y][x]) {
+                        cost[y][x] = g(current) + 1;
+                        prev[y][x] = current;
+                        q.push({x: x, y: y, priority: cost[y][x]+h({x: x, y: y})});
+                        animationList.push({x: x, y: y});
+                        if (x==dst.x && y==dst.y) {
+                            var track = [dst];
+                            while (prev[track[0].y][track[0].x])
+                                track.unshift(prev[track[0].y][track[0].x]);
+                            return {
+                                animationList: animationList,
+                                track: track
+                            };
+                        }
+                    }
+                }
+            }
+
+            return {
+                animationList: animationList,
+                track: []
+            };
+        }
+    };
+
     switch (this.algorithm) {
         case '0': return bfs(src, dst);
         case '1': return bibfs(src, dst);
         case '2': return ids(src, dst);
-        case '3':
+        case '3': return astar(src, dst);
         case '4':
         case '5':
     }

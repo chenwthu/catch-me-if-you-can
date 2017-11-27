@@ -93,9 +93,53 @@ function newSrcDst(map) {
 
 function Queue() {
     this.data = [];
-    this.size = function() { return this.data.length; }
+    this.size = function() { return this.data.length; };
     this.empty = function() { return this.size() == 0; };
     this.push = function(val) { this.data.push(val); };
     this.front = function() { return this.empty() ? undefined : this.data[0]; };
     this.pop = function() { return this.data.shift(); };
+}
+
+function PriorityQueue() {
+    var self = this;
+
+    var siftUp = function(id) {
+        if (!id || id>=self.size()) return;
+        var parentId = Math.floor((id-1) / 2);
+        if (self.data[id].priority < self.data[parentId].priority) {
+            var temp = self.data[id];
+            self.data[id] = self.data[parentId];
+            self.data[parentId] = temp;
+            siftUp(parentId);
+        }
+    };
+
+    var siftDown = function(id) {
+        var lId = id*2+1, rId = id*2+2, minId = id;
+        if (rId >= self.size())
+            if (lId >= self.size()) return;
+            else minId = lId;
+        else
+            minId = (self.data[lId].priority<self.data[rId].priority) ? lId : rId;
+        if (self.data[id].priority > self.data[minId].priority) {
+            var temp = self.data[id];
+            self.data[id] = self.data[minId];
+            self.data[minId] = temp;
+            siftDown(minId);
+        }
+    };
+
+    this.data = [];
+    this.size = function() { return this.data.length; };
+    this.empty = function() { return this.size() == 0; };
+    this.push = function(val) { this.data.push(val); siftUp(this.size()-1); };
+    this.top = function() { return this.empty() ? undefined : this.data[0]; };
+    this.pop = function() {
+        if (this.empty()) return undefined;
+        var top = this.top();
+        this.data[0] = this.data[this.size()-1];
+        this.data.pop();
+        siftDown(0);
+        return top;
+    };
 }
