@@ -23,6 +23,7 @@ $(function() {
     setup();
 
     var animation = 0;
+    var animationTimer;
 
     /* mouse event */
     var dragging = -1;
@@ -93,6 +94,22 @@ $(function() {
     $('#show-animation').on('click', function() { animation ^= 1; });
 
     $('#catch-me').on('click', function() {
+        var startAnimation = function() {
+            $('#catch-me').html('STOP!');
+            $('#clear-obstacles,#clear-tracks').attr('disabled', true);
+        };
+
+        var stopAnimation = function() {
+            animationTimer = clearInterval(animationTimer);
+            $('#catch-me').html('CATCH ME!');
+            $('#clear-obstacles,#clear-tracks').attr('disabled', false);
+        };
+
+        if (animationTimer) {
+            stopAnimation();
+            return;
+        }
+
         $('#clear-tracks').click();
 
         var result = searcher.search(gridShape, map, src, dst);
@@ -105,8 +122,9 @@ $(function() {
         };
 
         if (animation) {
+            startAnimation();
             var toggle = 0;
-            var int = setInterval(function() {
+            animationTimer = setInterval(function() {
                 var x = result.animationList.front().x;
                 var y = result.animationList.front().y;
                 if (toggle) result.animationList.pop();
@@ -121,7 +139,8 @@ $(function() {
 
                 if (result.animationList.empty()) {
                     showTrack();
-                    clearInterval(int);
+                    animationTimer = clearInterval(animationTimer);
+                    stopAnimation();
                 }
             }, 50);
         }
