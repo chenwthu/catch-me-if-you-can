@@ -285,8 +285,8 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
         case '0': return bfs(src, dst);
         case '1': return bibfs(src, dst);
         case '2': return ids(src, dst);
-        case '3': return astar(src, dst);
-        case '4':
+        case '3':
+        case '4': return astar(src, dst);
         case '5':
     }
 };

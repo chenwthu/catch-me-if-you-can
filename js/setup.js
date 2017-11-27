@@ -22,7 +22,7 @@ $(function() {
     };
     setup();
 
-    var animation = 0;
+    var animation = 1;
     var animationTimer;
 
     /* mouse event */
@@ -33,8 +33,10 @@ $(function() {
         return px2id(gridShape, mouseX, mouseY);
     };
 
-    $('#map-container').width($(this).height())
+    $('#map-container')
     .on('mousedown mousemove', function(e) {
+        if (animationTimer) return;
+
         if (e.which == 1) { // left button
             var pos = getPos(e);
 
@@ -52,8 +54,9 @@ $(function() {
         }
     })
     .on('mouseup', function(e) {
-        var pos = getPos(e);
+        if (animationTimer) return;
 
+        var pos = getPos(e);
         if (dragging==1 && (map[pos.y][pos.x]==0 || map[pos.y][pos.x]>3)) {
             map[src.y][src.x] = 0;
             src = pos;
@@ -70,7 +73,6 @@ $(function() {
             srcDstPainter.paint(gridShape, 'image', src.x, src.y, srcImage);
             srcDstPainter.paint(gridShape, 'image', dst.x, dst.y, dstImage);
         }
-
         dragging = -1;
     })
     .on('mouseleave', function() { dragging = -1; });

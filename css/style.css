@@ -52,7 +52,7 @@ body
 
     overflow: auto;
 
-    width: auto;
+    width: 100%;
     height: calc(100%-10px);
     margin: 5px;
     padding: 0;
