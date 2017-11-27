@@ -56,8 +56,8 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
 
             var q = new Queue();
             var animationList = new Queue();
-            for (q.push(src), animationList.push(src); !q.empty(); q.pop()) {
-                var current = q.front();
+            for (q.push(src), animationList.push(src); !q.empty(); ) {
+                var current = q.pop();
 
                 var neighbor = getNeighbor(current);
                 for (var i = 0; i < neighbor.length; ++i) {
@@ -241,13 +241,16 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
                 prev.push(new Array(map[0].length));
 
             var g = function(pos) { return cost[pos.y][pos.x]; };
-            var h = function(pos) { return Math.abs(pos.x-dst.x) + Math.abs(pos.y-dst.y); };
+            var h = function(pos) {
+                var manhattan = Math.abs(pos.x-dst.x) + Math.abs(pos.y-dst.y);
+                if (gridShape.shape == '2') manhattan /= 2;
+                return manhattan;
+            };
 
             var q = new PriorityQueue();
             var animationList = new Queue();
-            for (q.push({x: src.x, y: src.y, priority: 0}),
-                    animationList.push(src); !q.empty(); q.pop()) {
-                var current = q.top();
+            for (q.push({x: src.x, y: src.y, priority: 0}), animationList.push(src); !q.empty(); ) {
+                var current = q.pop();
 
                 var neighbor = getNeighbor(current);
                 for (var i = 0; i < neighbor.length; ++i) {
