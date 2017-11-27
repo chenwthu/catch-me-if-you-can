@@ -2,7 +2,7 @@ function Searcher(algorithm) {
     this.algorithm = algorithm;
 }
 
-Searcher.prototype.search = function(gridShape, map, src, dst, animation, painter) {
+Searcher.prototype.search = function(gridShape, map, src, dst) {
     var valid = function(pos) {
         return 0<=pos.x && pos.x<map[0].length && 0<=pos.y && pos.y<map.length;
     };
@@ -146,37 +146,12 @@ Searcher.prototype.search = function(gridShape, map, src, dst, animation, painte
         };
     }
 
-    /* main */
     switch (this.algorithm) {
-        case '0': result = bfs(src, dst); break;
-        case '1': result = bibfs(src, dst); break;
+        case '0': return bfs(src, dst);
+        case '1': return bibfs(src, dst);
         case '2':
         case '3':
         case '4':
         case '5':
     }
-
-    var showTrack = function() {
-        $.each(result.track, function(id, val) {
-            painter.paint(gridShape, 'fill', val.x, val.y, 'red');
-            if (!(val.x==src.x && val.y==src.y) && !(val.x==dst.x && val.y==dst.y))
-                map[val.y][val.x] = 5;
-        });
-    };
-
-    if (animation) {
-        var int = setInterval(function() {
-            var current = result.animationList.front();
-            painter.paint(gridShape, 'fill', current.x, current.y, 'cyan');
-            if (!(current.x==src.x && current.y==src.y) && !(current.x==dst.x && current.y==dst.y))
-                map[current.y][current.x] = 4;
-            result.animationList.pop();
-
-            if (result.animationList.empty()) {
-                showTrack();
-                clearInterval(int);
-            }
-        }, 200);
-    }
-    else showTrack();
 };

@@ -94,7 +94,36 @@ $(function() {
 
     $('#catch-me').on('click', function() {
         $('#clear-tracks').click();
-        searcher.search(gridShape, map, src, dst, animation, trackPainter);
+
+        var result = searcher.search(gridShape, map, src, dst);
+        var showTrack = function() {
+            $.each(result.track, function(id, val) {
+                trackPainter.paint(gridShape, 'fill', val.x, val.y, 'red');
+                if (!(val.x==src.x && val.y==src.y) && !(val.x==dst.x && val.y==dst.y))
+                    map[val.y][val.x] = 5;
+            });
+        };
+
+        if (animation) {
+            var int = setInterval(function() {
+                var x = result.animationList.front().x;
+                var y = result.animationList.front().y;
+                result.animationList.pop();
+
+                if (x==-1 && y==-1) $('#clear-tracks').click();
+                else if (0<=x && x<map[0].length && 0<=y && y<map.length) {
+                    trackPainter.paint(gridShape, 'fill', x, y, 'cyan');
+                    if (!(x==src.x && y==src.y) && !(x==dst.x && y==dst.y))
+                        map[y][x] = 4;
+                }
+
+                if (result.animationList.empty()) {
+                    showTrack();
+                    clearInterval(int);
+                }
+            }, 100);
+        }
+        else showTrack();
     });
 
     $('#clear-obstacles').on('click', function() {
