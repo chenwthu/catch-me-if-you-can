@@ -80,11 +80,12 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
                     }
                 }
             }
+
+            return {
+                animationList: animationList,
+                track: []
+            };
         }
-        return {
-            animationList: animationList,
-            track: []
-        };
     };
 
     var bibfs = function(src, dst) {
@@ -130,7 +131,7 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
                             return {
                                 animationList: animationList,
                                 track: track
-                            }
+                            };
                         }
                         visited[k][y][x] = 1;
                         prev[y][x] = current[k];
@@ -139,17 +140,92 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
                     }
                 }
             }
+
+            return {
+                animationList: animationList,
+                track: []
+            };
         }
-        return {
-            animationList: animationList,
-            track: []
+    };
+
+    var ids = function(src, dst) {
+        if (src.x==dst.x && src.y==dst.y) return {
+            animationList: new Queue(),
+            track: [src]
         };
-    }
+        else {
+            var visited = [];
+            for (var i = 0; i < map.length; ++i) {
+                visited.push([]);
+                for (var j = 0; j < map[0].length; ++j)
+                    visited[i].push(Infinity);
+            }
+            visited[src.y][src.x] = 0;
+
+            var prev = [];
+            for (var i = 0; i < map.length; ++i)
+                prev.push(new Array(map[0].length));
+
+            // return 1 if find answer
+            // return 0 if reach depth limit
+            // return -1 if no answer
+            var dfs = function(current, depth, depthLimit) {
+                if (current.x==dst.x && current.y==dst.y) return 1;
+
+                var reachDepthLimit = (depth==depthLimit) ? 1 : 0;
+                if (depth < depthLimit) {
+                    var neighbor = getNeighbor(current);
+                    for (var i = 0; i < neighbor.length; ++i) {
+                        var x = current.x + neighbor[i].x;
+                        var y = current.y + neighbor[i].y;
+                        if (valid({x: x, y: y}) && map[y][x]!=3 && depth+1<visited[y][x]) {
+                            visited[y][x] = depth + 1;
+                            prev[y][x] = current;
+                            animationList.push({x: x, y: y});
+                            var result = dfs({x: x, y: y}, depth+1, depthLimit);
+                            if (result == 1) return 1;
+                            if (result == 0) reachDepthLimit = 1;
+                        }
+                    }
+                }
+
+                return reachDepthLimit ? 0 : -1;
+            };
+
+            var animationList = new Queue();
+            var depthLimit = 1;
+            while (true) {
+                animationList.push(src);
+
+                var result = dfs(src, 0, depthLimit++);
+                if (result == 1) {
+                    var track = [dst];
+                    while (prev[track[0].y][track[0].x])
+                        track.unshift(prev[track[0].y][track[0].x]);
+                    return {
+                        animationList: animationList,
+                        track: track
+                    };
+                }
+                if (result == -1) return {
+                    animationList: animationList,
+                    track: []
+                };
+
+                for (var i = 0; i < map.length; ++i)
+                    for (var j = 0; j < map[0].length; ++j)
+                        visited[i][j] = Infinity;
+                visited[src.y][src.x] = 0;
+
+                animationList.push({x: -1, y: -1});
+            }
+        }
+    };
 
     switch (this.algorithm) {
         case '0': return bfs(src, dst);
         case '1': return bibfs(src, dst);
-        case '2':
+        case '2': return ids(src, dst);
         case '3':
         case '4':
         case '5':

@@ -105,23 +105,25 @@ $(function() {
         };
 
         if (animation) {
+            var toggle = 0;
             var int = setInterval(function() {
                 var x = result.animationList.front().x;
                 var y = result.animationList.front().y;
-                result.animationList.pop();
+                if (toggle) result.animationList.pop();
 
                 if (x==-1 && y==-1) $('#clear-tracks').click();
                 else if (0<=x && x<map[0].length && 0<=y && y<map.length) {
-                    trackPainter.paint(gridShape, 'fill', x, y, 'cyan');
+                    trackPainter.paint(gridShape, 'fill', x, y, toggle ? 'cyan' : 'white');
                     if (!(x==src.x && y==src.y) && !(x==dst.x && y==dst.y))
                         map[y][x] = 4;
                 }
+                toggle ^= 1;
 
                 if (result.animationList.empty()) {
                     showTrack();
                     clearInterval(int);
                 }
-            }, 100);
+            }, 50);
         }
         else showTrack();
     });
