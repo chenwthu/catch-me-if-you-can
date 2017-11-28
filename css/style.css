@@ -33,8 +33,9 @@ body
     left: 0;
 
     display: -webkit-box;
+    display: -webkit-flex;
     display: -ms-flexbox;
-    display: flex;
+    display:         flex;
 
     width: 90%;
     height: 90%;
@@ -42,8 +43,9 @@ body
     padding: 0;
 
     -webkit-box-pack: center;
+    -webkit-justify-content: center;
     -ms-flex-pack: center;
-    justify-content: center;
+            justify-content: center;
 }
 
 #map-container
@@ -57,7 +59,7 @@ body
     margin: 5px;
     padding: 0;
 
-    border: 1px solid;
+    border: 1px solid #888;
     border-radius: 5px;
 }
 
@@ -77,55 +79,150 @@ canvas
 #panel
 {
     display: -webkit-box;
+    display: -webkit-flex;
     display: -ms-flexbox;
-    display: flex;
-        flex-direction: column;
+    display:         flex;
+            flex-direction: column;
 
     width: auto;
     height: calc(100%-10px);
     margin: 5px;
     padding: 5px;
 
-    border: 1px solid;
+    white-space: nowrap;
+
+    border: 1px solid #888;
     border-radius: 5px;
 
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
-    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+}
+
+#panel > *
+{
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+            flex-grow: 1;
+}
+
+input[type='radio']
+{
+    display: none;
+}
+
+label {
+    color: #555;
+}
+
+label:before
+{
+    content: '\27a4';
+
+    color: #fff;
+}
+
+label:hover:before
+{
+    color: #9ff;
+}
+
+input:checked + label:before
+{
+    color: #f05654;
+}
+
+button
+{
+    font-size: 100%;
+    font-weight: bold;
+
+    padding: .5em;
+
+    color: #fdfbfb;
+    border: none;
+    border-radius: 5px;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#89f7fe), to(#66a6ff));
+    background-image: -webkit-linear-gradient(top, #89f7fe, #66a6ff);
+    background-image:      -o-linear-gradient(top, #89f7fe, #66a6ff);
+    background-image:         linear-gradient(top, #89f7fe, #66a6ff);
+}
+
+button:hover
+{
+    font-size: 125%;
+
+    color: #f05654;
 }
 
 #grid-shape
 {
     display: -webkit-box;
+    display: -webkit-flex;
     display: -ms-flexbox;
-    display: flex;
-        flex-direction: column;
+    display:         flex;
+            flex-direction: column;
 
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
-    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
 }
 
 #algorithm
 {
     display: -webkit-box;
+    display: -webkit-flex;
     display: -ms-flexbox;
-    display: flex;
-        flex-direction: column;
+    display:         flex;
+            flex-direction: column;
 
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
-    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
 }
 
 #buttons
 {
     display: -webkit-box;
+    display: -webkit-flex;
     display: -ms-flexbox;
-    display: flex;
-        flex-direction: column;
+    display:         flex;
+            flex-direction: column;
 
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
-    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+}
+
+#button > *
+{
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+            flex-grow: 1;
+}
+
+#catch-me
+{
+    font-size: 150%;
+
+    background-image: -webkit-gradient(linear, left top, left bottom, from(top), color-stop(#667eea), to(#764ba2));
+    background-image: -webkit-linear-gradient(top, #667eea, #764ba2);
+    background-image:      -o-linear-gradient(top, #667eea, #764ba2);
+    background-image:         linear-gradient(top, #667eea, #764ba2);
+
+    -webkit-box-flex: 2;
+    -webkit-flex-grow: 2;
+    -ms-flex-positive: 2;
+            flex-grow: 2;
+}
+
+#catch-me:hover
+{
+    font-size: 175%;
 }

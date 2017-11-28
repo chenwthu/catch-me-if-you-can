@@ -43,7 +43,7 @@ Painter.prototype.paint = function() {
         switch (args[1]) {
             case 'contour':
                 ctx.closePath();
-                ctx.strokeStyle = 'gray';
+                ctx.strokeStyle = '#aaa';
                 ctx.stroke();
                 break;
 
@@ -54,8 +54,8 @@ Painter.prototype.paint = function() {
 
             case 'image':
                 var img = new Image();
-                img.src = args[4]; // 32x32 png
-                img.onload = function() { ctx.drawImage(img, x-16, y-16); }
+                img.src = args[4];
+                img.onload = function() { ctx.drawImage(img, x-16, y-16, 32, 32); };
         }
     };
 

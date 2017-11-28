@@ -17,18 +17,27 @@
         <div id="panel">
             <div id="grid-shape">
                 <button>Grid Shape</button>
-                <div><input type="radio" name="grid-shape" value="0" id="triangle">Triangle</div>
-                <div><input type="radio" name="grid-shape" value="1" id="square" checked="checked">Square (4-connected)</div>
-                <div><input type="radio" name="grid-shape" value="2" id="hexagon">Hexagon</div>
+                <input type="radio" name="grid-shape" value="0" id="triangle">
+                <label for="triangle">Triangle</label>
+                <input type="radio" name="grid-shape" value="1" id="square" checked="checked">
+                <label for="square">Square (4-connected)</label>
+                <input type="radio" name="grid-shape" value="2" id="hexagon">
+                <label for="hexagon">Hexagon</label>
             </div>
             <div id="algorithm">
                 <button>Algorithm</button>
-                <div><input type="radio" name="algorithm" value="0" checked="checked">Breadth First Search (BFS)</div>
-                <div><input type="radio" name="algorithm" value="1">Bidirectional BFS</div>
-                <div><input type="radio" name="algorithm" value="2">Iterative Deepening Search</div>
-                <div><input type="radio" name="algorithm" value="3">Greedy Best First Search</div>
-                <div><input type="radio" name="algorithm" value="4">A* Search</div>
-                <div><input type="radio" name="algorithm" value="5">Bidirectional A* Search</div>
+                <input type="radio" name="algorithm" value="0" id="bfs" checked="checked">
+                <label for="bfs">Breadth First Search (BFS)</label>
+                <input type="radio" name="algorithm" value="1" id="bibfs">
+                <label for="bibfs">Bidirectional BFS</label>
+                <input type="radio" name="algorithm" value="2" id="ids">
+                <label for="ids">Iterative Deepening Search</label>
+                <input type="radio" name="algorithm" value="3" id="gbfs">
+                <label for="gbfs">Greedy Best First Search</label>
+                <input type="radio" name="algorithm" value="4" id="astar">
+                <label for="astar">A* Search</label>
+                <input type="radio" name="algorithm" value="5" id="biastar">
+                <label for="biastar">Bidirectional A* Search</label>
             </div>
             <div id="buttons">
                 <button id="show-animation">Show Animation</button>

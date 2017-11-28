@@ -43,11 +43,11 @@ $(function() {
             if (map[pos.y][pos.x] > 3) $('#clear-tracks').click();
             if (map[pos.y][pos.x]==0 && (dragging==-1 || dragging==3)) {
                 map[pos.y][pos.x] = 3;
-                obstaclePainter.paint(gridShape, 'fill', pos.x, pos.y, 'gray');
+                obstaclePainter.paint(gridShape, 'fill', pos.x, pos.y, '#ccc');
             }
             else if (map[pos.y][pos.x]==3 && (dragging==-1 || dragging==0)) {
                 map[pos.y][pos.x] = 0;
-                obstaclePainter.paint(gridShape, 'fill', pos.x, pos.y, 'white');
+                obstaclePainter.paint(gridShape, 'fill', pos.x, pos.y, '#fff');
             }
 
             if (dragging == -1) dragging = map[pos.y][pos.x];
@@ -78,6 +78,10 @@ $(function() {
     .on('mouseleave', function() { dragging = -1; });
 
     /* panel */
+    $('#grid-shape button').on('click', function() {
+        $('#grid-shape label').slideToggle();
+    });
+
     $('input[name=grid-shape]').on('change', function() {
         gridPainter.clear();
         obstaclePainter.clear();
@@ -89,6 +93,10 @@ $(function() {
         setup();
     });
 
+    $('#algorithm button').on('click', function() {
+        $('#algorithm label').slideToggle();
+    });
+
     $('input[name=algorithm]').on('change', function() {
         searcher.algorithm = $('input[name=algorithm]:checked').val();
     });
@@ -98,13 +106,13 @@ $(function() {
     $('#catch-me').on('click', function() {
         var startAnimation = function() {
             $('#catch-me').html('STOP!');
-            $('#clear-obstacles,#clear-tracks').attr('disabled', true);
+            $('#clear-obstacles,#clear-tracks').hide();
         };
 
         var stopAnimation = function() {
             animationTimer = clearInterval(animationTimer);
             $('#catch-me').html('CATCH ME!');
-            $('#clear-obstacles,#clear-tracks').attr('disabled', false);
+            $('#clear-obstacles,#clear-tracks').show();
         };
 
         if (animationTimer) {
@@ -117,7 +125,7 @@ $(function() {
         var result = searcher.search(gridShape, map, src, dst);
         var showTrack = function() {
             $.each(result.track, function(id, val) {
-                trackPainter.paint(gridShape, 'fill', val.x, val.y, 'red');
+                trackPainter.paint(gridShape, 'fill', val.x, val.y, '#f05654');
                 if (!(val.x==src.x && val.y==src.y) && !(val.x==dst.x && val.y==dst.y))
                     map[val.y][val.x] = 5;
             });
@@ -133,7 +141,7 @@ $(function() {
 
                 if (x==-1 && y==-1) $('#clear-tracks').click();
                 else if (0<=x && x<map[0].length && 0<=y && y<map.length) {
-                    trackPainter.paint(gridShape, 'fill', x, y, toggle ? 'cyan' : 'white');
+                    trackPainter.paint(gridShape, 'fill', x, y, toggle ? '#9ff' : '#fff');
                     if (!(x==src.x && y==src.y) && !(x==dst.x && y==dst.y))
                         map[y][x] = 4;
                 }
