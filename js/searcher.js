@@ -242,9 +242,17 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
 
             var g = function(pos) { return cost[pos.y][pos.x]; };
             var h = function(pos) {
-                var manhattan = Math.abs(pos.x-dst.x) + Math.abs(pos.y-dst.y);
-                if (gridShape.shape == '2') manhattan /= 2;
-                return manhattan;
+                switch (gridShape.shape) {
+                    case '0':
+                    case '1':
+                        return Math.abs(pos.x-dst.x) + Math.abs(pos.y-dst.y);
+                    case '2':
+                        var x = dst.x - pos.x + (pos.y&1);
+                        var y = Math.abs(pos.y - dst.y);
+                        return (y&1)
+                            ? Math.abs(x*2-1) + Math.max(0, (y+1)/2 - Math.abs(x - ((x>0)?0:1)))
+                            : Math.abs(x)*2 + Math.max(0, y/2 - Math.abs(x));
+                }
             };
 
             var q = new PriorityQueue();
