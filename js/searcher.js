@@ -115,7 +115,7 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
                 var current = [q[0].front(), q[1].front()];
 
                 var neighbor = [getNeighbor(current[0]), getNeighbor(current[1])];
-                var k = q[0].size() <= q[1].size() ? 0 : 1;
+                var k = (q[0].size()<=q[1].size()) ? 0 : 1;
                 for (var i = 0; i < neighbor[k].length; ++i) {
                     var x = current[k].x + neighbor[k][i].x;
                     var y = current[k].y + neighbor[k][i].y;
@@ -355,12 +355,88 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
         }
     };
 
+    var biastar = function(src, dst) {
+        if (src.x==dst.x && src.y==dst.y) return {
+            animationList: new Queue(),
+            track: [src]
+        };
+        else {
+            var cost = [[], []];
+            for (var k = 0; k < 2; ++k)
+                for (var i = 0; i < map.length; ++i) {
+                    cost[k].push([]);
+                    for (var j = 0; j < map[0].length; ++j)
+                        cost[k][i].push(Infinity);
+                }
+            cost[0][src.y][src.x] = 0;
+            cost[1][dst.y][dst.x] = 0;
+
+            var prev = [];
+            for (var i = 0; i < map.length; ++i)
+                prev.push(new Array(map[0].length));
+
+            var g = function(k, pos) { return cost[k][pos.y][pos.x]; };
+            var h = function(pos) {
+                switch (gridShape.shape) {
+                    case '0':
+                    case '1':
+                        return Math.abs(pos[0].x-pos[1].x) + Math.abs(pos[0].y-pos[1].y);
+                    case '2':
+                        var x = pos[1].x - pos[0].x + (pos[0].y&1);
+                        var y = Math.abs(pos[0].y - pos[1].y);
+                        return (y&1)
+                            ? Math.abs(x*2-1) + Math.max(0, (y+1)/2 - Math.abs(x - ((x>0)?0:1)))
+                            : Math.abs(x)*2 + Math.max(0, y/2 - Math.abs(x));
+                }
+            };
+
+            var q = [new PriorityQueue(), new PriorityQueue()];
+            var animationList = new Queue();
+            for (q[0].push({x: src.x, y: src.y, priority: 0}), q[1].push({x: dst.x, y: dst.y, priority: 0}),
+                    animationList.push(src), animationList.push(dst); !q[0].empty() && !q[1].empty(); ) {
+                var current = [q[0].top(), q[1].top()];
+
+                var neighbor = [getNeighbor(current[0]), getNeighbor(current[1])];
+                var k = (q[0].size()<=q[1].size()) ? 0 : 1;
+                q[k].pop();
+                for (var i = 0; i < neighbor[k].length; ++i) {
+                    var x = current[k].x + neighbor[k][i].x;
+                    var y = current[k].y + neighbor[k][i].y;
+                    if (valid({x: x, y: y}) && map[y][x]!=3 && g(k, current[k])+1<cost[k][y][x]) {
+                        if (cost[k^1][y][x] < Infinity) {
+                            var track = [k ? current[k] : {x: x, y: y}];
+                            while (prev[track[0].y][track[0].x])
+                                track.unshift(prev[track[0].y][track[0].x]);
+                            track.reverse();
+                            track.unshift(k ? {x: x, y: y} : current[k]);
+                            while (prev[track[0].y][track[0].x])
+                                track.unshift(prev[track[0].y][track[0].x]);
+                            return {
+                                animationList: animationList,
+                                track: track
+                            };
+                        }
+                        cost[k][y][x] = g(k, current[k]) + 1;
+                        prev[y][x] = current[k];
+                        q[k].push({x: x, y: y, priority: cost[k][y][x]+h([{x: x, y: y}, {x: current[k^1].x, y: current[k^1].y}])});
+                        animationList.push({x: x, y: y});
+                    }
+                }
+            }
+
+            return {
+                animationList: animationList,
+                track: []
+            };
+        }
+    };
+
     switch (this.algorithm) {
         case '0': return bfs(src, dst);
         case '1': return bibfs(src, dst);
         case '2': return ids(src, dst);
         case '3': return gbfs(src, dst);
         case '4': return astar(src, dst);
-        case '5':
+        case '5': return biastar(src, dst);
     }
 };
