@@ -222,6 +222,72 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
         }
     };
 
+    var gbfs = function(src, dst) {
+        if (src.x==dst.x && src.y==dst.y) return {
+            animationList: new Queue(),
+            track: [src]
+        };
+        else {
+            var visited = [];
+            for (var i = 0; i < map.length; ++i) {
+                visited.push([]);
+                for (var j = 0; j < map[0].length; ++j)
+                    visited[i].push(0);
+            }
+            visited[src.y][src.x] = 1;
+
+            var prev = [];
+            for (var i = 0; i < map.length; ++i)
+                prev.push(new Array(map[0].length));
+
+            var h = function(pos) {
+                switch (gridShape.shape) {
+                    case '0':
+                    case '1':
+                        return Math.abs(pos.x-dst.x) + Math.abs(pos.y-dst.y);
+                    case '2':
+                        var x = dst.x - pos.x + (pos.y&1);
+                        var y = Math.abs(pos.y - dst.y);
+                        return (y&1)
+                            ? Math.abs(x*2-1) + Math.max(0, (y+1)/2 - Math.abs(x - ((x>0)?0:1)))
+                            : Math.abs(x)*2 + Math.max(0, y/2 - Math.abs(x));
+                }
+            };
+
+            var q = new PriorityQueue();
+            var animationList = new Queue();
+            for (q.push({x: src.x, y: src.y, priority: 0}), animationList.push(src); !q.empty(); ) {
+                var current = q.pop();
+
+                var neighbor = getNeighbor(current);
+                for (var i = 0; i < neighbor.length; ++i) {
+                    var x = current.x + neighbor[i].x;
+                    var y = current.y + neighbor[i].y;
+                    if (valid({x: x, y: y}) && map[y][x]!=3 && !visited[y][x]) {
+                        visited[y][x] = 1;
+                        prev[y][x] = current;
+                        q.push({x: x, y: y, priority: h({x: x, y: y})});
+                        animationList.push({x: x, y: y});
+                        if (x==dst.x && y==dst.y) {
+                            var track = [dst];
+                            while (prev[track[0].y][track[0].x])
+                                track.unshift(prev[track[0].y][track[0].x]);
+                            return {
+                                animationList: animationList,
+                                track: track
+                            };
+                        }
+                    }
+                }
+            }
+
+            return {
+                animationList: animationList,
+                track: []
+            };
+        }
+    };
+
     var astar = function(src, dst) {
         if (src.x==dst.x && src.y==dst.y) return {
             animationList: new Queue(),
@@ -293,7 +359,7 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
         case '0': return bfs(src, dst);
         case '1': return bibfs(src, dst);
         case '2': return ids(src, dst);
-        case '3':
+        case '3': return gbfs(src, dst);
         case '4': return astar(src, dst);
         case '5':
     }
