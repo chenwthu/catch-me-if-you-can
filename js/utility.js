@@ -85,7 +85,7 @@ function newSrcDst(map) {
             x: Math.floor(Math.random()*(map[0].length-5))+2,
             y: Math.floor(Math.random()*(map.length-5))+2
         };
-    } while (map[dst.y][dst.x]);
+    } while (map[dst.y][dst.x] || Math.abs(src.x-dst.x)>20 || Math.abs(src.y-dst.y)>20);
     map[dst.y][dst.x] = 2;
     
     return [src, dst];
