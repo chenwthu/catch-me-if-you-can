@@ -1,21 +1,29 @@
+/*
+ *  Take in gridShape and the grid's x-index and y-index coordinates in the map.
+ *  Return pixel coordinates of its center.
+ *
+ *  rtype: json
+ *         {x, y, direction} for triangle grid
+ *         {x, y} for square and hexagon
+ */
 function id2px(gridShape, x, y) {
     var a = gridShape.a;
 
     switch (gridShape.shape) {
-        case '0':
+        case '0': // triangle
             return {
                 x: x * a / 2,
                 y: (y+.5) * (a*Math.sqrt(3)/2),
                 direction: ((x+y)&1) * 2 - 1
             };
 
-        case '1':
+        case '1': // square
             return {
                 x: (x+.5) * a,
                 y: (y+.5) * a
             };
 
-        case '2':
+        case '2': // hexagon
             return {
                 x: (y&1) ? (x*1.5*a) : ((x*1.5+.75)*a),
                 y: y * (a*Math.sqrt(3)/4)
@@ -23,11 +31,17 @@ function id2px(gridShape, x, y) {
     }
 }
 
+/*
+ *  Take in gridShape and pixel coordinates. Return x-index and y-index
+ *  coordinates of the grid that has the pixel inside.
+ *
+ *  rtype: json {x, y}
+ */
 function px2id(gridShape, x, y) {
     var a = gridShape.a;
 
     switch (gridShape.shape) {
-        case '0':
+        case '0': // triangle
             var h = a * Math.sqrt(3) / 2;
             var u = Math.floor(x/a*2);
             var v = Math.floor(y/h);
@@ -38,13 +52,13 @@ function px2id(gridShape, x, y) {
                 y: v
             };
 
-        case '1':
+        case '1': // square
             return {
                 x: Math.floor(x/a),
                 y: Math.floor(y/a)
             };
 
-        case '2':
+        case '2': // hexagon
             var h = a * Math.sqrt(3) / 2;
             var u = Math.floor(x/a/1.5);
             var v = Math.floor(y/h);
@@ -57,6 +71,11 @@ function px2id(gridShape, x, y) {
     }
 }
 
+/*
+ *  Take in canvas and gridShape. Return a map of corresponding size with all 0.
+ *
+ *  rtype: Array of Array
+ */
 function getMap(canvas, gridShape) {
     var map = [];
 
@@ -69,6 +88,14 @@ function getMap(canvas, gridShape) {
     return map;
 }
 
+/*
+ *  Take in a map. Randomly generate positions of src and dst. It is guaranteed
+ *  that src and dst are located in empty grids not too close to the boundary,
+ *  and Chebyshev distance between them is less than or equal to 20.
+ *  Note that map is modified in this function.
+ *
+ *  rtype: 2-element Array of json {x, y}
+ */
 function newSrcDst(map) {
     var src, dst;
 
@@ -91,6 +118,9 @@ function newSrcDst(map) {
     return [src, dst];
 }
 
+/*
+ *  CLASS first-in-first-out queue
+ */
 function Queue() {
     var self = this;
 
@@ -102,6 +132,11 @@ function Queue() {
     self.pop = function() { return self.data.shift(); };
 }
 
+/*
+ *  CLASS priority queue
+ *  Element with least priority ranks top. Between two elements with equal
+ *  priority, the newer ranks the other.
+ */
 function PriorityQueue() {
     var self = this;
     
@@ -113,7 +148,7 @@ function PriorityQueue() {
             self.data.push(val);
         else
             for (var i = 0; i < self.size(); ++i)
-                if (val.priority <= self.data[i].priority) { // prefer new item
+                if (val.priority <= self.data[i].priority) {
                     self.data.splice(i, 0, val);
                     break;
                 }

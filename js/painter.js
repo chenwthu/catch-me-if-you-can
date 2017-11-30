@@ -1,11 +1,22 @@
+/*
+ *  CLASS painter on some canvas
+ *  constructor
+ */
 function Painter(canvas) {
     this.canvas = canvas;
 }
 
 /*
- * paint(gridShape, 'contour')
- * paint(gridShape, 'fill', x, y, fillStyle)
- * paint(gridShape, 'image', x, y, src)
+ *  PROTOTYPE FUNCTION paint
+ *  usage:
+ *    paint(gridShape, 'contour')
+ *    Draw all grids with gray edges.
+ *
+ *    paint(gridShape, 'fill', x, y, fillStyle)
+ *    Fill the grid indicated by given x-index and y-index.
+ *
+ *    paint(gridShape, 'image', x, y, src)
+ *    Paint the image src in the grid indicated by given x-index and y-index.
  */
 Painter.prototype.paint = function() {
     var ctx = this.canvas[0].getContext('2d');
@@ -16,7 +27,7 @@ Painter.prototype.paint = function() {
 
         ctx.beginPath();
         switch (args[0].shape) {
-            case '0':
+            case '0': // triangle
                 var h = a * Math.sqrt(3) / 2;
                 var direction = grid.direction;
                 ctx.moveTo(x, y-h*direction/2);
@@ -24,14 +35,14 @@ Painter.prototype.paint = function() {
                 ctx.lineTo(x+a/2, y+h*direction/2);
                 break;
 
-            case '1':
+            case '1': // square
                 ctx.moveTo(x-a/2, y-a/2);
                 ctx.lineTo(x+a/2, y-a/2);
                 ctx.lineTo(x+a/2, y+a/2);
                 ctx.lineTo(x-a/2, y+a/2);
                 break;
                 
-            case '2':
+            case '2': // hexagon
                 var h = a * Math.sqrt(3) / 2;
                 ctx.moveTo(x-a/4, y-h/2);
                 ctx.lineTo(x+a/4, y-h/2);
@@ -66,6 +77,10 @@ Painter.prototype.paint = function() {
                 paintGrid(id2px(args[0], x, y));
 };
 
+/*
+ *  PROTOTYPE FUNCTION clear
+ *  Clear the canvas.
+ */
 Painter.prototype.clear = function() {
     this.canvas[0].getContext('2d').clearRect(0, 0, this.canvas.width(), this.canvas.height());
 };
