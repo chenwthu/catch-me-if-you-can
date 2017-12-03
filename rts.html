@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CATCH ME IF YOU CAN!</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+    <div id="container">
+    <div id="sub-container">
+        <div id="map-container">
+            <canvas id="grid-layer" width="2048" height="2048"></canvas>
+            <canvas id="obstacle-layer" width="2048" height="2048"></canvas>
+            <canvas id="src-dst-layer" width="2048" height="2048"></canvas>
+            <canvas id="track-layer" width="2048" height="2048"></canvas>
+        </div>
+        <div id="panel">
+            <div id="grid-shape">
+                <button>Grid Shape</button>
+                <input type="radio" name="grid-shape" value="0" id="triangle">
+                <label for="triangle">Triangle</label>
+                <input type="radio" name="grid-shape" value="1" id="square" checked="checked">
+                <label for="square">Square (4-connected)</label>
+                <input type="radio" name="grid-shape" value="2" id="hexagon">
+                <label for="hexagon">Hexagon</label>
+            </div>
+            <div id="algorithm">
+                <button>Algorithm</button>
+                <input type="radio" name="algorithm" value="0" id="bfs" checked="checked">
+                <label for="bfs">Breadth First Search (BFS)</label>
+                <input type="radio" name="algorithm" value="1" id="bibfs">
+                <label for="bibfs">Bidirectional BFS</label>
+                <input type="radio" name="algorithm" value="2" id="ids">
+                <label for="ids">Iterative Deepening Search</label>
+                <input type="radio" name="algorithm" value="3" id="gbfs">
+                <label for="gbfs">Greedy Best First Search</label>
+                <input type="radio" name="algorithm" value="4" id="astar">
+                <label for="astar">A* Search</label>
+                <input type="radio" name="algorithm" value="5" id="biastar">
+                <label for="biastar">Bidirectional A* Search</label>
+            </div>
+            <div id="buttons">
+                <button id="catch-me">CATCH ME!</button>
+                <button id="clear-obstacles">Clear Obstacles</button>
+                <button id="clear-tracks">Clear Tracks</button>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/utility.js"></script>
+    <script type="text/javascript" src="js/painter.js"></script>
+    <script type="text/javascript" src="js/searcher.js"></script>
+    <script type="text/javascript" src="js/rts/rts.js"></script>
+</body>
+</html>
