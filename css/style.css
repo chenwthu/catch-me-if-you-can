@@ -71,6 +71,7 @@ canvas
 }
 
 #obstacle-layer,
+#terrain-layer,
 #track-layer
 {
     z-index: -1;
