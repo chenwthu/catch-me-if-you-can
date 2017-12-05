@@ -29,7 +29,9 @@ $(function() {
             '#00e38e', '#00e78c', '#00eb8a', '#00ef88', '#00f386', '#00f784', '#00fb82', '#00ff80'];
         for (var y = 0; y < map.length; ++y)
             for (var x = 0; x < map[0].length; ++x) {
-                map[y][x] = parseInt(Math.random() * 100) % 64;
+                map[y][x] = 3*Math.sin(x*Math.PI/10) + 2*Math.sin(y*Math.PI/15);
+                map[y][x] = Math.floor((map[y][x]+5)*6.3 + Math.random()*11-5);
+                map[y][x] = Math.max(0, Math.min(63, map[y][x]));
                 terrainPainter.paint(gridShape, 'fill', x, y, colormap[63-map[y][x]]);
             }
 
@@ -43,6 +45,7 @@ $(function() {
     setup();
 
     var catching = 0;
+    var caught = 0;
 
     /*
      *  mouse event on panel
@@ -52,13 +55,13 @@ $(function() {
     });
 
     $('input[name=grid-shape]').on('change', function() {
+        gridShape.shape = $('input[name=grid-shape]:checked').val();
         if (catching) $('#catch-me').click();
+        if (caught) { $('#catch-me').click(); return; }
 
         terrainPainter.clear();
         srcDstPainter.clear();
         trackPainter.clear();
-
-        gridShape.shape = $('input[name=grid-shape]:checked').val();
         setup();
     });
 
@@ -124,13 +127,18 @@ $(function() {
                 }
             }
 
+            if (Math.random() < .05) {
+                setTimeout(function() { escape(); }, 300);
+                return;
+            }
+
             dst.x += neighbor[k].x;
             dst.y += neighbor[k].y;
             srcDstPainter.clear();
             srcDstPainter.paint(gridShape, 'image', src.x, src.y, srcImage);
             srcDstPainter.paint(gridShape, 'image', dst.x, dst.y, dstImage);
 
-            setTimeout(function() { escape(); }, 200);
+            setTimeout(function() { escape(); }, 153);
         };
 
         var chase = function() {
@@ -195,11 +203,12 @@ $(function() {
 
             if (track[0].x==dst.x && track[0].y==dst.y) {
                 catching = 0;
-                $('#catch-me').html('CATCH ME!');
+                caught = 1;
+                $('#catch-me').html('RESTART');
                 return;
             }
 
-            var timeout = Math.max(parseInt(map[track[0].y][track[0].x]*5), 150);
+            var timeout = Math.floor(Math.max(97, map[track[0].y][track[0].x]*3));
             src = track[0];
             srcDstPainter.clear();
             srcDstPainter.paint(gridShape, 'image', src.x, src.y, srcImage);
@@ -208,13 +217,22 @@ $(function() {
             setTimeout(function() { chase(); }, timeout);
         };
 
-        if (catching) {
+        if (caught) { // restart
+            caught = 0;
+            $('#catch-me').html('CATCH ME!');
+
+            terrainPainter.clear();
+            srcDstPainter.clear();
+            trackPainter.clear();
+            setup();
+        }
+        else if (catching) { // pause
             catching = 0;
             $('#catch-me').html('CATCH ME!');
         }
-        else {
+        else { // catch me
             catching = 1;
-            $('#catch-me').html('STOP!');
+            $('#catch-me').html('PAUSE');
             escape();
             chase();
         }
