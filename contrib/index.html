@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>CATCH ME IF YOU CAN!</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
     <div id="container">
@@ -24,6 +24,11 @@
                 <label for="hexagon">Hexagon</label>
             </div>
             <div id="algorithm">
+                <button>Algorithm</button>
+                <input type="radio" name="algorithm" value="0" id="dijkstra" checked="checked">
+                <label for="dijkstra">Dijkstra</label>
+                <input type="radio" name="algorithm" value="1" id="spfa">
+                <label for="spfa">SPFA</label>
             </div>
             <div id="buttons">
                 <button id="catch-me">CATCH ME!</button>
@@ -31,9 +36,10 @@
         </div>
     </div>
     </div>
-    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="js/utility.js"></script>
-    <script type="text/javascript" src="js/painter.js"></script>
-    <script type="text/javascript" src="js/rts/rts2.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../js/utility.js"></script>
+    <script type="text/javascript" src="../js/painter.js"></script>
+    <script type="text/javascript" src="searcher.js"></script>
+    <script type="text/javascript" src="setup.js"></script>
 </body>
 </html>
