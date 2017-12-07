@@ -109,14 +109,14 @@ $(function() {
             ];
             var k = Math.floor(Math.random() * 5);
             $.each(target, function(id, val) {
-                if (Math.max(Math.abs(val.x-src.x), Math.abs(val.y-src.y)) > 10)
-                    if (((target[k].x-dst.x)*(dst.x-src.x) + (target[k].y-dst.y)*(dst.y-src.y))
-                            / (Math.abs(target[k].x-dst.x) + Math.abs(target[k].y-dst.y) + 1e-6)
-                            / (Math.abs(dst.x-src.x) + Math.abs(dst.y-src.y))
-                            < ((val.x-dst.x)*(dst.x-src.x) + (val.y-dst.y)*(dst.y-src.y))
-                            / (Math.abs(val.x-dst.x) + Math.abs(val.y-dst.y) + 1e-6)
-                            / (Math.abs(dst.x-src.x) + Math.abs(dst.y-src.y)))
-                        k = id;
+                if (Math.max(Math.abs(val.x-src.x), Math.abs(val.y-src.y)) < 10) return;
+                if (((target[k].x-dst.x)*(dst.x-src.x) + (target[k].y-dst.y)*(dst.y-src.y))
+                        / (Math.abs(target[k].x-dst.x) + Math.abs(target[k].y-dst.y) + 1e-6)
+                        / (Math.abs(dst.x-src.x) + Math.abs(dst.y-src.y))
+                        < ((val.x-dst.x)*(dst.x-src.x) + (val.y-dst.y)*(dst.y-src.y))
+                        / (Math.abs(val.x-dst.x) + Math.abs(val.y-dst.y) + 1e-6)
+                        / (Math.abs(dst.x-src.x) + Math.abs(dst.y-src.y)))
+                    k = id;
             });
 
             var track = escaper.search(gridShape, invMap, dst, target[k]);
@@ -151,7 +151,7 @@ $(function() {
             srcPainter.clear();
             srcPainter.paint(gridShape, 'image', src.x, src.y, srcImage);
 
-            var timeout = Math.floor(Math.max(100, track.length>0 ? map[src.y][src.x]*3 : 0));
+            var timeout = Math.floor(Math.max(100, track.length>0 ? map[src.y][src.x]*4 : 0));
             setTimeout(function() { chase(); }, timeout);
         };
 
