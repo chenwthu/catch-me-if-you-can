@@ -1,7 +1,8 @@
 $(function() {
     // initialize instances
     var terrainPainter = new Painter($('#terrain-layer'));
-    var srcDstPainter = new Painter($('#src-dst-layer'));
+    var srcPainter = new Painter($('#src-layer'));
+    var dstPainter = new Painter($('#dst-layer'));
     var trackPainter = new Painter($('#track-layer'));
     var escaper = new Searcher('0');
     var chaser = new Searcher($('input[name=algorithm]:checked').val());
@@ -40,8 +41,8 @@ $(function() {
                 terrainPainter.paint(gridShape, 'fill', x, y, colormap[invMap[y][x]]);
             }
 
-        srcDstPainter.paint(gridShape, 'image', src.x, src.y, srcImage);
-        srcDstPainter.paint(gridShape, 'image', dst.x, dst.y, dstImage);
+        srcPainter.paint(gridShape, 'image', src.x, src.y, srcImage);
+        dstPainter.paint(gridShape, 'image', dst.x, dst.y, dstImage);
         $('#map-container').scrollLeft(
             id2px(gridShape, (src.x+dst.x)/2, (src.y+dst.y)/2).x - $('#map-container').width()/2);
         $('#map-container').scrollTop(
@@ -61,7 +62,7 @@ $(function() {
                 invMap[y][x] = 63 - map[y][x];
                 terrainPainter.paint(gridShape, 'fill', x, y, colormap[invMap[y][x]]);
             }
-    }, 797);
+    }, 999);
 
     /*
      *  mouse event on panel
@@ -76,7 +77,8 @@ $(function() {
         if (caught) { $('#catch-me').click(); return; }
 
         terrainPainter.clear();
-        srcDstPainter.clear();
+        srcPainter.clear();
+        dstPainter.clear();
         trackPainter.clear();
         setup();
     });
@@ -121,12 +123,11 @@ $(function() {
             track.shift();
             if (track.length>0 && !(track[0].x==src.x && track[0].y==src.y)) {
                 dst = track[0];
-                srcDstPainter.clear();
-                srcDstPainter.paint(gridShape, 'image', src.x, src.y, srcImage);
-                srcDstPainter.paint(gridShape, 'image', dst.x, dst.y, dstImage);
+                dstPainter.clear();
+                dstPainter.paint(gridShape, 'image', dst.x, dst.y, dstImage);
             }
 
-            setTimeout(function() { escape(); }, 137);
+            setTimeout(function() { escape(); }, 150);
         };
 
         var chase = function() {
@@ -143,19 +144,14 @@ $(function() {
                 catching = 0;
                 caught = 1;
                 $('#catch-me').html('RESTART');
-
-                srcDstPainter.clear();
-                srcDstPainter.paint(gridShape, 'image', src.x, src.y, srcImage);
-                srcDstPainter.paint(gridShape, 'image', dst.x, dst.y, dstImage);
                 return;
             }
 
-            var timeout = Math.floor(Math.max(97, track.length>0 ? map[track[0].y][track[0].x]*3 : 0));
             src = track[0];
-            srcDstPainter.clear();
-            srcDstPainter.paint(gridShape, 'image', src.x, src.y, srcImage);
-            srcDstPainter.paint(gridShape, 'image', dst.x, dst.y, dstImage);
+            srcPainter.clear();
+            srcPainter.paint(gridShape, 'image', src.x, src.y, srcImage);
 
+            var timeout = Math.floor(Math.max(100, track.length>0 ? map[src.y][src.x]*3 : 0));
             setTimeout(function() { chase(); }, timeout);
         };
 
@@ -164,7 +160,8 @@ $(function() {
             $('#catch-me').html('CATCH ME!');
 
             terrainPainter.clear();
-            srcDstPainter.clear();
+            srcPainter.clear();
+            dstPainter.clear();
             trackPainter.clear();
             setup();
         }
