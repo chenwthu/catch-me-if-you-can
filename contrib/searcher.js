@@ -75,6 +75,7 @@ Searcher.prototype.search = function(gridShape, map, src, dst) {
         for (var i = 0; i < map.length; ++i)
             prev.push(new Array(map[0].length));
 
+        // binary heap
         var q = new function() {
             var self = this;
 
