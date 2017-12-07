@@ -3,7 +3,7 @@ $(function() {
     var terrainPainter = new Painter($('#terrain-layer'));
     var srcDstPainter = new Painter($('#src-dst-layer'));
     var trackPainter = new Painter($('#track-layer'));
-    var escaper = new Searcher('1');
+    var escaper = new Searcher('0');
     var chaser = new Searcher($('input[name=algorithm]:checked').val());
 
     // shape and side length (triangle and square) or diameter (hexagon) of a grid
@@ -109,7 +109,7 @@ $(function() {
                 srcDstPainter.paint(gridShape, 'image', dst.x, dst.y, dstImage);
             }
 
-            setTimeout(function() { escape(); }, 153);
+            setTimeout(function() { escape(); }, 137);
         };
 
         var chase = function() {
@@ -133,8 +133,7 @@ $(function() {
                 return;
             }
 
-            var timeout = Math.floor(Math.max(
-                97, track.length>0 ? map[track[0].y][track[0].x]*3 : 0));
+            var timeout = Math.floor(Math.max(97, track.length>0 ? map[track[0].y][track[0].x]*3 : 0));
             src = track[0];
             srcDstPainter.clear();
             srcDstPainter.paint(gridShape, 'image', src.x, src.y, srcImage);
